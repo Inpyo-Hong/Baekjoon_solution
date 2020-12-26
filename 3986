@@ -1,0 +1,33 @@
+#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int main() {
+	stack<char> s;
+	int n, count = 0;
+	string str;
+	char c;
+	cin >> n;
+	for (int i = 0; i < n; i++) {	//문자열의 갯수만큼 반복
+		cin >> str;
+		for (int j = 0; j < str.size(); j++) {
+			c = str.at(j);
+			if (s.empty() == true) //스택이 비어있는 경우
+				s.push(c);
+			else if (c == s.top()) //스택의 마지막 문자가 새로 넣을 문자와 같은 경우
+				s.pop();	//스택의 마지막문자 제거
+			else			//스택의 마지막 문자와 새로 넣을 문자가 다른 경우
+				s.push(c);	//스택에 문자 저장
+		}
+
+		if (s.empty() == true)	//스택이 비어있는 경우(문자열이 좋은 단어일 경우)
+			count++;
+		else {			//문자열이 좋은단어가 아닌경우
+			while (s.empty() != true)	//스택을 비움
+				s.pop();
+		}
+	}
+	cout << count;
+	return 0;
+}
