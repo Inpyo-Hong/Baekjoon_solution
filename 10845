@@ -1,0 +1,64 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <queue>
+#include <string>
+#include <string.h>			//스트링 자를때 필요한 헤더파일
+
+using namespace std;
+int main() {
+	queue<int> q;
+	int n, number;
+	string s;
+
+	ios_base::sync_with_stdio(false);	//cin, cout 시간초과 해결코드
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {
+	
+		cin >> s;
+		
+		if (s == "push") {	
+			cin >> number;
+			q.push(number);
+
+		}
+		else if (s == "pop") {
+			if (q.empty() == false) {		//큐가 차있을때
+				cout << q.front() << "\n";
+				q.pop();
+			}
+			else							//큐가 비어있을 때
+				cout << "-1" << "\n";	
+		}
+
+		else if (s == "size")
+			cout << q.size() << "\n";
+
+		else if (s == "empty") {
+			if (q.empty() == true)
+				cout << "1\n";
+			else
+				cout << "0\n";
+		}
+
+		else if (s == "front") {
+			if (q.empty() == true)
+				cout << "-1\n";
+			else
+				cout << q.front() << "\n";
+		}
+
+		else if (s == "back") {
+			if (q.empty() == true)
+				cout << "-1\n";
+			else
+				cout << q.back() << "\n";
+		}
+
+	}
+
+	return 0;
+}
