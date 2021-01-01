@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+
+	int fibo[2][41]; //2차원배열생성 (0의 값과 1의 값 배열)
+	fibo[0][0] = 1;	
+	fibo[0][1] = 0;
+	fibo[1][0] = 0;
+	fibo[1][1] = 1;
+
+	int n, m;
+
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {
+		cin >> m;
+		if (m > 1) {	//얻으려는 값이 0이나 1이면 배열에 이미 값이 들어있음
+			for (int j = 2; j <= m; j++) {	//2부터 시작해 값 얻어오기
+				fibo[0][j] = fibo[0][j - 2] + fibo[0][j - 1];
+				fibo[1][j] = fibo[1][j - 2] + fibo[1][j - 1];
+			}
+		}
+		
+		cout << fibo[0][m] << ' ' << fibo[1][m] << "\n";
+	}
+
+	system("pause");
+	return 0;
+}
+
