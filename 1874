@@ -1,0 +1,49 @@
+#include <iostream>
+#include <stack>
+#include <vector>
+using namespace std;
+
+int main() {
+	int n, m, j=1, count=0;
+	vector <int> v;			// 입력받을 수열
+	vector <char> answer;	// 정답출력할 배열(+ -)
+	stack<int> s;
+
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {	//수열 입력
+		cin >> m;
+		v.push_back(m);
+	}
+
+	for (int i = 0; i < n; i++) {
+		if ((s.empty() == false) && (s.top() == v.at(i))) {	// 스택에 값 추가 전 pop 하는 경우 
+			answer.push_back('-');			//정답배열에 - 저장
+			s.pop();
+		}
+		else {												// 빼내야할 수열까지 스택에 차례대로 집어넣음
+			for (j; j <= v[i]; j++) {						// 오름차순으로 push해야 하기 때문에 j는 v[i]값으로 증가
+				s.push(j);
+				answer.push_back('+');
+			}
+		}
+		if ((s.empty() == false) && (s.top() == v.at(i))) {		// 위 pop 하는 if문과 같음
+			answer.push_back('-');								// 스택에 값 추가 후 pop 하는 경우 
+			s.pop();
+		}
+	}
+
+	for (int i = 0; i < answer.size(); i++) {		// - 갯수 카운트
+		if (answer[i] == '-')
+			count++;
+	}
+
+	if (count == n) {			//- 갯수가 n개일 경우
+		for (int i = 0; i < answer.size(); i++)
+			cout << answer[i] << "\n";	//정답출력
+	}
+	else						// - 갯수가 n개가 아닌경우(연산불가)
+		cout << "NO\n";			// NO 출력
+	
+	return 0;
+}
