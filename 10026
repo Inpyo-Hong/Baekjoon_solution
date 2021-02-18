@@ -1,0 +1,111 @@
+#include <iostream>
+#include <queue>
+#include <string>
+using namespace std;
+
+char arr[101][101] = { ' ' };	//RGB 넣을 배열
+int path[101][101] = { 0 };		//정상 그룹배열
+int path_s[101][101] = { 0 };	//색약 그룹배열
+
+void normal(int x, int y, int n, int count) {	//그룹화 함수(정상)
+	
+	int move[5][2] = { {0,0}, { 0,1 },{ 0,-1 },{ 1,0 },{ -1,0 } };	//자신,상하좌우
+	queue <pair<int, int>>q;
+	q.push(pair<int, int>(x, y));
+
+	while (!q.empty()) {
+		x = q.front().second;	//큐에 있는 x값 가져오기
+		y = q.front().first;	//큐에 있는 y값 가져오기
+		q.pop();
+		for (int i = 0; i < 5; i++) {
+			int n_x = x + move[i][0];	//현재좌표에서 그대로, 위, 아래, 오른쪽, 왼쪽 값
+			int n_y = y + move[i][1];
+			if ((n_x >= 0 && n_x < n) && (n_y >= 0 && n_y < n)) {	//n_x, n_y 값이 n x n 배열 크기보다 작을 때
+				if (path[n_y][n_x] < 1) {	// 한번도 안거친 좌표일 때
+					if (arr[n_y][n_x] == arr[y][x]) {	//옮긴 좌표가 원래좌표값과 같을 때
+						path[n_y][n_x] = count;	//같은것끼리 그룹화
+						q.push(pair<int, int>(n_y, n_x));	//큐에 입력
+					}
+				}
+			}
+		}
+	}
+	return;
+}
+
+void special(int x, int y, int n, int count) {//그룹화 함수(색약)
+	
+	int move[5][2] = { { 0,0 },{ 0,1 },{ 0,-1 },{ 1,0 },{ -1,0 } };
+	queue <pair<int, int>>q;
+	q.push(pair<int, int>(x, y));
+	
+	while (!q.empty()) {
+		x = q.front().second;
+		y = q.front().first;
+		q.pop();
+		for (int i = 0; i < 5; i++) {
+			int n_x = x + move[i][0];
+			int n_y = y + move[i][1];
+			if ((n_x >= 0 && n_x < n) && (n_y >= 0 && n_y < n)) {
+				if (path_s[n_y][n_x] < 1) {	// 한번도 안거친 좌표일 때
+					if (arr[n_y][n_x] == arr[y][x]) {	//옮긴 좌표가 원래좌표값과 같을 때
+						path_s[n_y][n_x] = count;		//그룹화
+						q.push(pair<int, int>(n_y, n_x));	//큐에 입력
+					}
+					else if (((arr[n_y][n_x] == 'R')|| (arr[n_y][n_x] == 'G'))&& ((arr[y][x] == 'R') || (arr[y][x] == 'G'))) {
+						//옮긴 좌표가 R or G 이고 원래좌표도 R or G 일때
+						path_s[n_y][n_x] = count;//그룹화
+						q.push(pair<int, int>(n_y, n_x));
+					}
+				}
+			}
+		}
+	}
+	return;
+}
+
+int main() {
+	int n, count = 1;
+	string s;
+	
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {	//스트링 입력받아 잘라서 arr에 입력
+		cin >> s;
+		for (int j = 0; j < n; j++)
+			arr[i][j] = s[j];
+	}
+	
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (path[i][j] == 0) {
+				normal(i, j, n, count);	//그룹화(정상인)
+				count++;
+			}
+		}
+	}
+	count = 1;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (path_s[i][j] == 0) {
+				special(i, j, n, count);//그룹화(색약)
+				count++;
+			}
+		}
+	}
+
+	int max_n=0, max_s = 0;
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (max_n < path[i][j])
+				max_n = path[i][j];		//정상인 그룹 갯수세기
+			if (max_s < path_s[i][j])
+				max_s = path_s[i][j];	//색약 그룹 갯수세기
+		}
+	}
+
+	cout << max_n << ' ' << max_s;
+	system("pause");
+	return 0;
+}
